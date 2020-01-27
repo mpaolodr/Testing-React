@@ -10,6 +10,7 @@ export default function StarWarsCharacters() {
   const [next, setNext] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [characters, setCharacters] = useState([]);
+
   useEffect(() => {
     setIsLoading(true);
     const getCharacters = async () => {
