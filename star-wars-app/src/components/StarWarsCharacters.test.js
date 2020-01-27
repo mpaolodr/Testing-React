@@ -9,6 +9,8 @@ jest.mock("../api");
 
 test("StarWarsCharacter component renders correctly", async () => {
   mockGetData.mockResolvedValueOnce({
+    next: "next_url",
+    prev: "prev_url",
     results: [
       { test: "test 1", url: 1 },
       { test: "test 2", url: 2 }
@@ -24,19 +26,19 @@ test("StarWarsCharacter component renders correctly", async () => {
 
   fireEvent.click(nextBtn);
   expect(mockGetData).toHaveBeenCalledTimes(1);
+  expect(mockGetData).toHaveBeenCalledWith("https://swapi.co/api/people");
 
   wait(() => {
-    expect(mockGetData).toHaveBeenCalledWith({ next: "next_url" });
     expect(getByTestId("character-div"));
+    expect(queryAllByText(/Test people/i)).not.toBeNull();
   });
-  expect(queryAllByText(/Test people/i)).not.toBeNull();
 
   fireEvent.click(prevBtn);
   expect(mockGetData).toHaveBeenCalledTimes(1);
-  wait(() => {
-    expect(mockGetData).toHaveBeenCalledWith({ prev: "prev_url" });
-    expect(getByTestId("character-div"));
-  });
+  expect(mockGetData).toHaveBeenCalledWith("https://swapi.co/api/people");
 
-  expect(queryAllByText(/Test people/i)).not.toBeNull();
+  wait(() => {
+    expect(getByTestId("character-div"));
+    expect(queryAllByText(/Test people/i)).not.toBeNull();
+  });
 });
